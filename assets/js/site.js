@@ -90,8 +90,43 @@
     }
   ];
 
+  /* Display order of the project buttons */
+  var ORDER = ['Vape Zone', 'Mr. Barber', 'Office Demolition', 'Everything Vapes & Cigars', "K's Barbershop", 'Canada School of Barbering'];
+  PROJECTS.sort(function (a, b) {
+    var ia = ORDER.indexOf(a.name), ib = ORDER.indexOf(b.name);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+  });
+
   var STAGE_MS = 3200;
   var $ = function (id) { return document.getElementById(id); };
+
+  /* Header: stronger edge once the page scrolls */
+  var hdr = document.querySelector('.hdr');
+  if (hdr) {
+    var onScroll = function () { hdr.classList.toggle('is-scrolled', window.scrollY > 40); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  }
+
+  /* Stats strip: count up when it scrolls into view */
+  var counters = document.querySelectorAll('[data-count]');
+  if (counters.length && 'IntersectionObserver' in window && !reduceMotion) {
+    var countIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        countIO.unobserve(en.target);
+        var n = en.target, to = Number(n.dataset.count), from = Number(n.dataset.from || 0), suf = n.dataset.suffix || '';
+        var t0 = null, dur = 1400;
+        var tick = function (ts) {
+          if (!t0) t0 = ts;
+          var k = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+          n.textContent = Math.round(from + (to - from) * e) + suf;
+          if (k < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (n) { countIO.observe(n); });
+  }
   var root = $('showcase');
 
   if (root) {
