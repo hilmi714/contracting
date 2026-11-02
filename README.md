@@ -44,4 +44,4 @@ To send leads somewhere else, change the `action` URL on `<form id="quote-form">
 ## Still to fill in
 
 
-- Client testimonials (currently placeholders)
+- Client testimonials: hidden for now; add real reviews later
