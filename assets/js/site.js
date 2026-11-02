@@ -391,6 +391,17 @@
     });
   }
 
+  /* Project video: make sure it plays inline (iPhone needs muted set as a property) */
+  Array.prototype.forEach.call(document.querySelectorAll('video.vid-main'), function (v) {
+    v.muted = true; v.defaultMuted = true; v.playsInline = true;
+    var tryPlay = function () { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) tryPlay(); else v.pause(); });
+      }, { threshold: 0.25 }).observe(v);
+    } else { tryPlay(); }
+  });
+
   /* Intro: click anywhere to skip */
   var intro = $('intro');
   if (intro) intro.addEventListener('click', function () { document.documentElement.classList.remove('has-intro'); });

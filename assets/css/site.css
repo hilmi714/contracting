@@ -200,9 +200,19 @@ html,body{overflow-x:clip}
   @media (max-width: 760px){html,body{overflow-x:hidden}}
 }
 /* iOS Safari: make rounded boxes really clip their blurred / scaled media */
-.clip-box,#ba-viewer{isolation:isolate;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-mask-image:-webkit-radial-gradient(white,black)}
+#ba-viewer{isolation:isolate;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-mask-image:-webkit-radial-gradient(white,black)}
 /* Long all-caps words in the wide font wrap instead of pushing the page wider */
 @media (max-width: 520px){
   h1,h2,h3{overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}
   .crumbs,.qlegend,.pill--outline{overflow-wrap:anywhere}
 }
+
+/* Project video: one <video>, still blurred backdrop, explicit sizing (works on iPhone) */
+.vid-frame{position:relative;height:clamp(460px,44vw,560px);overflow:hidden;border:1px solid #2A2A2E;border-radius:6px;background:#0A0A0B;isolation:isolate}
+.vid-bg{position:absolute;inset:-40px;background:url(../video/mr-barber-west-district-poster.jpg) center/cover no-repeat;filter:blur(30px) brightness(.4) saturate(1.15)}
+.vid-shade{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(10,10,11,0) 30%,rgba(10,10,11,.75) 100%)}
+.vid-box{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);aspect-ratio:478/850;max-width:100%;box-shadow:0 24px 60px rgba(0,0,0,.6);outline:1px solid rgba(201,151,63,.45);background:#000}
+.vid-main{display:block;width:100%;height:100%;object-fit:cover}
+.vid-tag{position:absolute;left:20px;top:20px;z-index:1;padding:8px 12px;background:#C9973F;color:#0A0A0B;border-radius:3px;font-family:Michroma,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+@supports not (aspect-ratio: 1){.vid-box{width:280px}}
+@media (max-width: 600px){.vid-frame{height:min(132vw,560px)}}
