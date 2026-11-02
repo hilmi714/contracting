@@ -321,10 +321,56 @@
      Quote form — sends through FormSubmit to info@stallioncontracting.ca
   ---------------------------------------------------------------- */
   var form = $('quote-form');
+
+  /* Step-by-step quiz: one question per screen, tap to advance */
+  var quiz = { step: 0 };
+  if (form && form.classList.contains('quiz')) {
+    var qSteps = form.querySelectorAll('.qstep'), qBars = form.querySelectorAll('.qbars span');
+    var qBack = $('q-back'), qNum = $('q-num'), qSummary = $('q-summary'), LAST = qSteps.length - 1;
+    var arrowNav = false;
+    form.classList.add('quiz-js');
+
+    quiz.show = function (i, focus) {
+      quiz.step = i;
+      Array.prototype.forEach.call(qSteps, function (s, k) { s.classList.toggle('is-current', k === i); });
+      Array.prototype.forEach.call(qBars, function (b, k) { b.classList.toggle('is-done', k <= i); });
+      qNum.textContent = i + 1;
+      qBack.hidden = i === 0;
+      if (i === LAST) {
+        qSummary.innerHTML = '';
+        Array.prototype.forEach.call(form.querySelectorAll('.qradio:checked'), function (r) {
+          var chip = document.createElement('span'); chip.textContent = r.value; qSummary.appendChild(chip);
+        });
+      }
+      if (focus) {
+        var target = i === LAST ? $('f-name') : qSteps[i].querySelector('.qlegend');
+        if (target) target.focus({ preventScroll: true });
+      }
+    };
+    quiz.preset = function () {
+      var p = form.dataset.preset;
+      if (!p) return 0;
+      var r = qSteps[0].querySelector('.qradio[value="' + p.replace(/"/g, '\\"') + '"]');
+      if (r) { r.checked = true; return 1; }
+      return 0;
+    };
+
+    form.addEventListener('keydown', function (e) { if (/^Arrow/.test(e.key)) arrowNav = true; });
+    form.addEventListener('click', function (e) {
+      if (!e.target.classList || !e.target.classList.contains('qradio')) return;
+      if (arrowNav) { arrowNav = false; return; }   /* keyboard users browse options with arrows; Enter/Space moves on */
+      var at = quiz.step;
+      setTimeout(function () { if (quiz.step === at && at < LAST) quiz.show(at + 1, true); }, 220);
+    });
+    qBack.addEventListener('click', function () { quiz.show(Math.max(0, quiz.step - 1), true); });
+    quiz.show(quiz.preset(), false);
+  }
+
   if (form && window.fetch) {
     var success = $('quote-success'), err = $('form-error'), btn = form.querySelector('button[type="submit"]');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (quiz.show && quiz.step < qSteps.length - 1) { quiz.show(quiz.step + 1, true); return; }
       err.hidden = true;
       if (!form.checkValidity()) { form.reportValidity(); return; }
       btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…';
@@ -340,7 +386,12 @@
       });
     });
     $('quote-reset').addEventListener('click', function () {
-      form.reset(); success.hidden = true; form.hidden = false; $('f-name').focus();
+      form.reset(); success.hidden = true; form.hidden = false;
+      if (quiz.show) quiz.show(quiz.preset(), true); else $('f-name').focus();
     });
   }
+
+  /* Intro: click anywhere to skip */
+  var intro = $('intro');
+  if (intro) intro.addEventListener('click', function () { document.documentElement.classList.remove('has-intro'); });
 })();

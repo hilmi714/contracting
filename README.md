@@ -5,9 +5,12 @@ Static website for **Stallion Contracting**, a Calgary commercial general contra
 No build step: plain HTML, CSS and JavaScript.
 
 ```
-index.html              the page (content, SEO tags, schema)
+index.html              home page (content, SEO tags, schema, first-visit logo intro)
+*-calgary/index.html    service pages: storefront build-outs, tenant improvements,
+                        commercial HVAC, commercial plumbing, building permits,
+                        architectural design (each with its own FAQ + schema)
 assets/css/site.css     styles
-assets/js/site.js       project showcase, FAQ, quote form
+assets/js/site.js       project showcase, quote quiz, header, stats count-up, intro
 assets/img/             logo, icons, social share image
 assets/img/projects/    project photos (+ -thumb versions)
 assets/video/           progress video
@@ -30,11 +33,13 @@ robots.txt, sitemap.xml search engines
 
 Only switch DNS when you're ready to replace the current site.
 
-## Quote form
+## Quote quiz
 
-The form sends leads to **info@stallioncontracting.ca** through [FormSubmit](https://formsubmit.co) (free, no account).
+The quote box is a 5-step quiz (project type → size → timeline → drawings/permits → contact).
+On service pages the first answer is pre-filled, so visitors start at step 2.
+Each request includes every answer plus which page it came from. It sends leads to **info@stallioncontracting.ca** through [FormSubmit](https://formsubmit.co) (free, no account).
 The **first** submission triggers a one-time activation email to that inbox — click the link in it, or no leads are delivered.
-To send leads somewhere else, change the `action` URL on `<form id="quote-form">` in `index.html`.
+To send leads somewhere else, change the `action` URL on `<form id="quote-form">` in `index.html` and each service page.
 
 ## Add a project to the showcase
 
