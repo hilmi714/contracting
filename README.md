@@ -43,5 +43,5 @@ To send leads somewhere else, change the `action` URL on `<form id="quote-form">
 
 ## Still to fill in
 
-- Street address and postal code (footer + schema in `index.html`)
+
 - Client testimonials (currently placeholders)
