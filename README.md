@@ -37,9 +37,13 @@ Only switch DNS when you're ready to replace the current site.
 
 The quote box is a 5-step quiz (project type → size → timeline → drawings/permits → contact).
 On service pages the first answer is pre-filled, so visitors start at step 2.
-Each request includes every answer plus which page it came from. It sends leads to **info@stallioncontracting.ca** through [FormSubmit](https://formsubmit.co) (free, no account).
-The **first** submission triggers a one-time activation email to that inbox — click the link in it, or no leads are delivered.
-To send leads somewhere else, change the `action` URL on `<form id="quote-form">` in `index.html` and each service page.
+
+Requests are handled by `send-quote.php` on the Hostinger server:
+- emails each request to **info@stallioncontracting.ca** (from no-reply@stallioncontracting.ca, Reply-To = the client)
+- saves a private backup of every lead to `stallion-leads/leads.csv` **one folder above public_html** (not reachable from the web)
+- if the script can't be reached, the site falls back to FormSubmit automatically
+
+To change the destination email, edit `TO_EMAIL` at the top of `send-quote.php`.
 
 ## Add a project to the showcase
 

@@ -374,24 +374,24 @@
       err.hidden = true;
       if (!form.checkValidity()) { form.reportValidity(); return; }
       btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…';
-      fetch(form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
-        method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form)
-      }).then(function (r) {
-        return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d || {} }; });
+      /* 1) our own mail script on the Hostinger server; 2) FormSubmit as a backup */
+      var post = function (url) {
+        return fetch(url, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) })
+          .then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d || {} }; });
+          })
+          .catch(function () { return { ok: false, d: {} }; });
+      };
+      var delivered = function (x) { return x && x.ok && (x.d.success === true || x.d.success === 'true'); };
+      post(form.action).then(function (x) {
+        if (delivered(x)) return x;
+        /* our script answered but refused (e.g. missing phone): show its message, don't retry */
+        if (x.d && x.d.success === 'false' && x.d.message) return x;
+        return form.dataset.backup ? post(form.dataset.backup).then(function (y) { return delivered(y) ? y : (x.d.message ? x : y); }) : x;
       }).then(function (x) {
-        /* FormSubmit answers 200 even when the form still needs activation: check its "success" flag */
-        var sent = x.ok && (x.d.success === true || x.d.success === 'true');
-        if (!sent) { var e = new Error('not sent'); e.detail = x.d.message || ''; throw e; }
+        if (!delivered(x)) { var e = new Error('not sent'); e.detail = (x.d && x.d.message) || ''; throw e; }
         form.hidden = true; success.hidden = false; success.focus();
       }).catch(function (e) {
-        /* Background send blocked (network / CORS): fall back to a normal form post.
-           FormSubmit then handles it directly and returns the visitor to /thank-you/. */
-        if (!(e && e.detail) && !form.dataset.fallback) {
-          form.dataset.fallback = '1';
-          btn.textContent = 'Sending…';
-          HTMLFormElement.prototype.submit.call(form);
-          return;
-        }
         var old = $('form-error-detail'); if (old) old.parentNode.removeChild(old);
         if (e && e.detail) {
           var d = document.createElement('strong');
