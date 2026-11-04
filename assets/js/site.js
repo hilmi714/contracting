@@ -384,6 +384,14 @@
         if (!sent) { var e = new Error('not sent'); e.detail = x.d.message || ''; throw e; }
         form.hidden = true; success.hidden = false; success.focus();
       }).catch(function (e) {
+        /* Background send blocked (network / CORS): fall back to a normal form post.
+           FormSubmit then handles it directly and returns the visitor to /thank-you/. */
+        if (!(e && e.detail) && !form.dataset.fallback) {
+          form.dataset.fallback = '1';
+          btn.textContent = 'Sending…';
+          HTMLFormElement.prototype.submit.call(form);
+          return;
+        }
         var old = $('form-error-detail'); if (old) old.parentNode.removeChild(old);
         if (e && e.detail) {
           var d = document.createElement('strong');
