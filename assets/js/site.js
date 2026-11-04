@@ -377,9 +377,20 @@
       fetch(form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
         method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form)
       }).then(function (r) {
-        if (!r.ok) throw new Error('bad status');
+        return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d || {} }; });
+      }).then(function (x) {
+        /* FormSubmit answers 200 even when the form still needs activation: check its "success" flag */
+        var sent = x.ok && (x.d.success === true || x.d.success === 'true');
+        if (!sent) { var e = new Error('not sent'); e.detail = x.d.message || ''; throw e; }
         form.hidden = true; success.hidden = false; success.focus();
-      }).catch(function () {
+      }).catch(function (e) {
+        var old = $('form-error-detail'); if (old) old.parentNode.removeChild(old);
+        if (e && e.detail) {
+          var d = document.createElement('strong');
+          d.id = 'form-error-detail'; d.style.display = 'block'; d.style.marginBottom = '6px';
+          d.textContent = e.detail;
+          err.insertBefore(d, err.firstChild);
+        }
         err.hidden = false;
       }).then(function () {
         btn.disabled = false; btn.textContent = btn.dataset.label;
