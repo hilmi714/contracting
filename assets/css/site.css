@@ -216,3 +216,23 @@ html,body{overflow-x:clip}
 .vid-tag{position:absolute;left:20px;top:20px;z-index:1;padding:8px 12px;background:#C9973F;color:#0A0A0B;border-radius:3px;font-family:Michroma,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase}
 @supports not (aspect-ratio: 1){.vid-box{width:280px}}
 @media (max-width: 600px){.vid-frame{height:min(132vw,560px)}}
+
+/* Calgary banner */
+@keyframes calDraw{to{stroke-dashoffset:0}}
+@keyframes calFill{to{fill-opacity:1}}
+@keyframes calBeacon{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes calMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes calChinook{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+@keyframes calWin{0%{opacity:0}40%{opacity:1}55%{opacity:.25}70%,100%{opacity:.95}}
+@keyframes calFadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cal-city{stroke-dasharray:1;stroke-dashoffset:1;fill-opacity:0;animation:calDraw 3.6s cubic-bezier(.4,.1,.2,1) forwards,calFill 1.4s 2.8s ease forwards}
+.cal-mtn{stroke-dasharray:1;stroke-dashoffset:1;animation:calDraw 2.6s .2s ease forwards}
+.cal-beacon{opacity:.25;animation:calBeacon 2.2s 3s ease-in-out infinite}
+.cal-win{fill:#F8E2A8;opacity:0;animation:calWin .9s ease forwards}
+.cal-chinook{animation:calChinook 3.2s .5s ease-out both}
+.cal-yyc{animation:calFadeUp 1s 4.2s ease both}
+.cal-marquee{display:flex;width:max-content;animation:calMarquee 38s linear infinite}
+.cal-sky{position:absolute;left:50%;bottom:0;width:1440px;height:260px;max-width:none;transform:translateX(-50%);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.has-intro [class*="cal-"]{animation-play-state:paused !important}
+@media (max-width: 760px){.cal-sky{width:1000px;height:181px}.cal-ribbon{height:48px !important}.cal-ribbon-lead{padding:0 14px 0 16px !important;gap:8px !important}.cal-ribbon-lead span{font-size:10px !important;letter-spacing:.18em !important}.cal-ribbon-sky{display:none !important}.cal-marquee{font-size:13px !important}.hero-inner{padding-bottom:230px !important}.cal-yyc{right:16px !important;bottom:12px !important;font-size:9px !important;padding:4px 8px !important}.cal-chinook{bottom:110px !important;height:300px !important}}
+@media (prefers-reduced-motion: reduce){.cal-city,.cal-mtn{stroke-dashoffset:0;fill-opacity:1;animation:none}.cal-beacon,.cal-marquee,.cal-chinook,.cal-yyc{animation:none;opacity:1}.cal-win{animation:none;opacity:.95}}
