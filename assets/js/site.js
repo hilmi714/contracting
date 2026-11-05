@@ -424,4 +424,27 @@
   /* Intro: click anywhere to skip */
   var intro = $('intro');
   if (intro) intro.addEventListener('click', function () { document.documentElement.classList.remove('has-intro'); });
+
+  /* Cookie consent: the idpixel analytics script loads only after "Accept" */
+  var IDP_SRC = 'https://cdn.idpixel.app/v1/idp-analytics-6aeba4a785a6346380ba4a94.min.js';
+  var banner = $('cookie-banner');
+  var getChoice = function () { try { return localStorage.getItem('stConsent'); } catch (e) { return null; } };
+  var setChoice = function (v) { try { localStorage.setItem('stConsent', v); localStorage.setItem('stConsentAt', new Date().toISOString()); } catch (e) {} };
+  var loadAnalytics = function () {
+    if (document.querySelector('script[src="' + IDP_SRC + '"]')) return;
+    var sc = document.createElement('script'); sc.src = IDP_SRC; sc.defer = true; document.head.appendChild(sc);
+  };
+  if (banner) {
+    var hideBanner = function () { banner.hidden = true; document.documentElement.classList.remove('has-cookie-banner'); };
+    var showBanner = function () { banner.hidden = false; document.documentElement.classList.add('has-cookie-banner'); };
+    $('cookie-accept').addEventListener('click', function () { setChoice('accepted'); loadAnalytics(); hideBanner(); });
+    $('cookie-decline').addEventListener('click', function () {
+      var had = getChoice() === 'accepted';
+      setChoice('declined'); hideBanner();
+      if (had) window.location.reload(); /* stop a script that was already running */
+    });
+    var settings = $('cookie-settings');
+    if (settings) settings.addEventListener('click', function () { showBanner(); $('cookie-accept').focus(); });
+    if (!getChoice()) showBanner();
+  }
 })();

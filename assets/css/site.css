@@ -239,3 +239,19 @@ html,body{overflow-x:clip}
 /* Phone: one-line top bar, full-width services ribbon */
 @media (max-width: 760px){.topbar-inner{justify-content:center !important;gap:2px 14px !important;padding:7px 16px !important;font-size:12px !important;text-align:center}.tb-area,.tb-email{display:none !important}.cal-ribbon{height:40px !important}.cal-ribbon-lead{display:none !important}.cal-marquee{font-size:12px !important;letter-spacing:.08em !important}.cal-marquee span[style*="padding: 0 22px"]{padding:0 14px !important}}
 @media (max-width: 760px){.cal-ribbon > div:last-child{-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}}
+
+/* Cookie consent banner */
+.cookie-banner{position:fixed;left:max(24px, env(safe-area-inset-left, 0px));bottom:max(24px, env(safe-area-inset-bottom, 0px));z-index:90;width:min(520px, calc(100% - 48px));display:flex;flex-direction:column;gap:14px;padding:20px 22px;background:#131315;color:#E6E0D6;border:1px solid #2A2A2E;border-top:3px solid #C9973F;border-radius:6px;box-shadow:0 18px 50px rgba(0,0,0,.55);font-family:'Archivo',system-ui,sans-serif;font-size:15px;line-height:1.5}
+.cookie-text{margin:0}
+.cookie-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
+.cookie-btn{min-height:44px;padding:0 20px;border-radius:4px;font:inherit;font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.cookie-btn-gold{background:#C9973F;color:#0A0A0B;border:1px solid #C9973F}
+.cookie-btn-gold:hover{background:#E2B865;border-color:#E2B865}
+.cookie-btn-line{background:transparent;color:#F4EFE6;border:1px solid #3A3A40}
+.cookie-btn-line:hover{border-color:#C9973F;color:#E2B865}
+.cookie-settings{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.cookie-settings:hover{color:#E2B865}
+@media (max-width: 760px){
+  .cookie-banner{left:12px;right:12px;width:auto;bottom:calc(76px + env(safe-area-inset-bottom, 0px));padding:16px;font-size:14px}
+  .cookie-actions .cookie-btn{flex:1 1 0}
+}
