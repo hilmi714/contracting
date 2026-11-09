@@ -256,17 +256,21 @@ html,body{overflow-x:clip}
   .cookie-actions .cookie-btn{flex:1 1 0}
 }
 
-/* Client logos */
+/* Client logos: identical tiles, one-colour marks */
 .cl-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
-.cl-track{display:flex;width:max-content;animation:clScroll 40s linear infinite}
-.cl-marquee:hover .cl-track,.cl-marquee:focus-within .cl-track{animation-play-state:paused}
-.cl-set{list-style:none;margin:0;padding:0 10px;display:flex;gap:20px}
-.cl-dup{padding-left:10px}
-.cl-tile{flex:none;width:220px;height:132px;display:flex;align-items:center;justify-content:center;padding:14px 18px;border:1px solid #2A2A2E;border-radius:6px;transition:transform .25s ease,border-color .25s ease}
-.cl-tile:hover{transform:translateY(-4px);border-color:#C9973F}
-.cl-tile img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.cl-track{display:flex;width:max-content;animation:clScroll 45s linear infinite}
+.cl-marquee:hover .cl-track{animation-play-state:paused}
+.cl-set{list-style:none;margin:0;padding:0 9px;display:flex;gap:18px}
+.cl-tile{position:relative;flex:none;width:236px;height:132px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#151517,#0F0F11);border:1px solid #26262B;border-radius:4px;transition:border-color .3s ease,transform .3s ease}
+.cl-tile::before,.cl-tile::after{content:"";position:absolute;width:14px;height:14px;border-color:#C9973F;border-style:solid;opacity:.55;transition:opacity .3s ease}
+.cl-tile::before{top:8px;left:8px;border-width:1px 0 0 1px}
+.cl-tile::after{bottom:8px;right:8px;border-width:0 1px 1px 0}
+.cl-logo{display:block;background:#D9D2C5;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;transition:background-color .3s ease}
+.cl-tile:hover{border-color:#3A3A40;transform:translateY(-3px)}
+.cl-tile:hover::before,.cl-tile:hover::after{opacity:1}
+.cl-tile:hover .cl-logo{background:#E2B865}
 @keyframes clScroll{to{transform:translateX(-50%)}}
-@media (max-width:760px){.cl-tile{width:168px;height:104px;padding:10px 14px}.cl-set{gap:14px}.cl-track{animation-duration:32s}}
+@media (max-width:760px){.cl-tile{width:184px;height:108px}.cl-logo{transform:scale(.82)}.cl-set{gap:14px}.cl-track{animation-duration:36s}}
 @media (prefers-reduced-motion:reduce){
  .cl-marquee{-webkit-mask-image:none;mask-image:none;padding-left:24px!important;padding-right:24px!important}
  .cl-track{animation:none;width:auto;max-width:1192px;margin:0 auto}
