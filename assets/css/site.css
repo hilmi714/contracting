@@ -277,3 +277,6 @@ html,body{overflow-x:clip}
  .cl-set{flex-wrap:wrap;justify-content:center;padding:0}
  .cl-dup{display:none}
 }
+
+/* checklist icons never shrink */
+li[style*="display: flex"] > svg[aria-hidden]{flex:none}
